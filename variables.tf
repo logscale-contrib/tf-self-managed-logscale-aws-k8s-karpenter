@@ -52,11 +52,11 @@ variable "chart" {
 }
 variable "chart_version" {
   type        = string
-  default     = "v0.18.*"
+  default     = "v0.16.*"
   description = "(optional) describe your variable"
 }
 variable "repository" {
   type        = string
-  default     = "oci://public.ecr.aws/karpenter"
+  default     = "https://charts.karpenter.sh"
   description = "(optional) describe your variable"
 }
