@@ -47,16 +47,16 @@ variable "values" {
 }
 variable "chart" {
   type        = string
-  default     = "linkerd-control-plane"
+  default     = "karpenter"
   description = "(optional) describe your variable"
 }
 variable "chart_version" {
   type        = string
-  default     = "1.9.*"
+  default     = "v0.18.*"
   description = "(optional) describe your variable"
 }
 variable "repository" {
   type        = string
-  default     = "https://charts.karpenter.sh"
+  default     = "oci://public.ecr.aws/karpenter"
   description = "(optional) describe your variable"
 }
