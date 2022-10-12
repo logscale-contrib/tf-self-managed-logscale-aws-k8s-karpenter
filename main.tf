@@ -69,7 +69,7 @@ resource "kubectl_manifest" "app" {
             },
           ]
           "releaseName" = var.release
-          "values"      = var.values
+          "values"      = yamldecode(var.values)
         }
         "repoURL"        = var.repository
         "targetRevision" = var.chart_version
