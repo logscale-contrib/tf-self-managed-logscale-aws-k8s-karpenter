@@ -47,12 +47,12 @@ variable "values" {
 }
 variable "chart" {
   type        = string
-  default     = "value"
+  default     = "linkerd-control-plane"
   description = "(optional) describe your variable"
 }
 variable "chart_version" {
   type        = string
-  default     = "v0.15.*"
+  default     = "1.9.*"
   description = "(optional) describe your variable"
 }
 variable "repository" {
