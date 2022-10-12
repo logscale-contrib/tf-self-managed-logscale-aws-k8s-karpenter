@@ -2,7 +2,7 @@
 # Workaround - https://github.com/hashicorp/terraform-provider-kubernetes/issues/1380#issuecomment-967022975
 resource "kubectl_manifest" "karpenter_provisioner_general" {
   depends_on = [
-    helm_release.karpenter
+    kubectl_manifest.app
   ]
   yaml_body = <<-YAML
   apiVersion: karpenter.sh/v1alpha5
@@ -57,7 +57,7 @@ resource "kubectl_manifest" "karpenter_provisioner_general" {
 # Workaround - https://github.com/hashicorp/terraform-provider-kubernetes/issues/1380#issuecomment-967022975
 resource "kubectl_manifest" "karpenter_provisioner_nvme" {
   depends_on = [
-    helm_release.karpenter
+    kubectl_manifest.app
   ]
 
   yaml_body = <<-YAML

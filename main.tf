@@ -38,47 +38,52 @@ resource "kubernetes_namespace" "karpenter" {
     name = "karpenter"
   }
 }
-
-resource "helm_release" "karpenter" {
-  namespace        = kubernetes_namespace.karpenter.metadata[0].name
-  create_namespace = false
-
-  name       = "karpenter"
-  repository = "https://charts.karpenter.sh"
-  chart      = "karpenter"
-  version    = "v0.15.0"
-
-  values = [<<EOF
-topologySpreadConstraints:
-  - maxSkew: 1
-    topologyKey: topology.kubernetes.io/zone
-    whenUnsatisfiable: DoNotSchedule
-EOF 
-  ]
-  set {
-    name  = "replicas"
-    value = 2
-  }
-
-
-  set {
-    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-    value = module.karpenter_irsa.iam_role_arn
-  }
-
-  set {
-    name  = "clusterName"
-    value = var.eks_cluster_id
-  }
-
-  set {
-    name  = "clusterEndpoint"
-    value = var.eks_endpoint
-  }
-
-  set {
-    name  = "aws.defaultInstanceProfile"
-    value = aws_iam_instance_profile.karpenter.name
-  }
+resource "kubectl_manifest" "app" {
+  yaml_body = yamlencode({
+    "apiVersion" = "argoproj.io/v1alpha1"
+    "kind"       = "Application"
+    "metadata" = {
+      "finalizers" = [
+        "resources-finalizer.argocd.argoproj.io",
+      ]
+      "name"      = var.chart
+      "namespace" = "argocd"
+    }
+    "spec" = {
+      "destination" = {
+        "server"    = "https://kubernetes.default.svc"
+        "namespace" = var.namespace
+      }
+      "project" = var.project
+      "source" = {
+        "chart" = var.chart
+        "helm" = {
+          "parameters" = [
+            {
+              "name"  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+              "value" = module.karpenter_irsa.iam_role_arn
+            },
+            {
+              "name"  = "clusterName"
+              "value" = var.eks_cluster_id
+            },
+          ]
+          "releaseName" = var.release
+          "values"      = var.values
+        }
+        "repoURL"        = var.repository
+        "targetRevision" = var.chart_version
+      }
+      "syncPolicy" = {
+        "automated" = {
+          "prune"    = true
+          "selfHeal" = true
+        }
+        "syncOptions" = [
+          "CreateNamespace=true"
+        ]
+      }
+    }
+  })
 }
 
