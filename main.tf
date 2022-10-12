@@ -67,6 +67,14 @@ resource "kubectl_manifest" "app" {
               "name"  = "clusterName"
               "value" = var.eks_cluster_id
             },
+            {
+              "name"  = "clusterEndpoint"
+              "value" = var.eks_endpoint
+            },
+            {
+              "name"  = "aws.defaultInstanceProfile"
+              "value" = aws_iam_instance_profile.karpenter.name
+            },
           ]
           "releaseName" = var.release
           "values"      = var.values
