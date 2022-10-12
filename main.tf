@@ -15,7 +15,7 @@ module "karpenter_irsa" {
   oidc_providers = {
     main = {
       provider_arn               = var.eks_oidc_provider_arn
-      namespace_service_accounts = ["karpenter:karpenter"]
+      namespace_service_accounts = ["karpenter:cw-karpenter"]
     }
   }
 
