@@ -84,7 +84,7 @@ resource "kubectl_manifest" "app" {
       }
       "ignoreDifferences" = [
         {
-          "group" = "apps"
+          "group" = "" # Argocd bug must be empty for secret 
           "kind"  = "Secret"
           "name" : "${var.release}-karpenter-cert"
           "namespace" : var.namespace
