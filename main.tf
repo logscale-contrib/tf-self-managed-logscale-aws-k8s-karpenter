@@ -89,7 +89,7 @@ resource "kubectl_manifest" "app" {
           "name" : "${var.release}-karpenter-cert"
           "namespace" : var.namespace
           "jsonPointers" = [
-            "/spec/data"
+            "/data"
           ]
         }
       ]
