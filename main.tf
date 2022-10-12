@@ -82,6 +82,17 @@ resource "kubectl_manifest" "app" {
         "repoURL"        = var.repository
         "targetRevision" = var.chart_version
       }
+      "ignoreDifferences" = [
+        {
+          "group" = "apps"
+          "kind"  = "Secret"
+          "name" : "${var.release}-karpenter-cert"
+          "namespace" : var.namespace
+          "jsonPointers" = [
+            "/spec/data"
+          ]
+        }
+      ]
       "syncPolicy" = {
         "automated" = {
           "prune"    = true
