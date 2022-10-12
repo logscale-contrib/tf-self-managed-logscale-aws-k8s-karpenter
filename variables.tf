@@ -43,14 +43,14 @@ variable "release" {
 } 
 variable "values" {
   description = "(optional) describe your variable"
-  default = [<<EOF
+  default = <<EOF
 topologySpreadConstraints:
   - maxSkew: 1
     topologyKey: topology.kubernetes.io/zone
     whenUnsatisfiable: DoNotSchedule
 replicas: 2
 EOF 
-  ]
+  
 } 
 variable "chart" {
   type = string
