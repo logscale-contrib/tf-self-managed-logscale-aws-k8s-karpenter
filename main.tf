@@ -32,12 +32,6 @@ resource "aws_iam_instance_profile" "karpenter" {
 
 
 
-resource "kubernetes_namespace" "karpenter" {
-
-  metadata {
-    name = "karpenter"
-  }
-}
 resource "kubectl_manifest" "app" {
   yaml_body = yamlencode({
     "apiVersion" = "argoproj.io/v1alpha1"
